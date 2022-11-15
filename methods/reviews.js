@@ -51,19 +51,3 @@ exports.selectReview = (review_id) => {
     return result.rows[0];
   });
 };
-
-exports.selectReviewComments = (review_id) => {
-  const queryStr = format(
-    `
-    SELECT *
-    FROM comments
-    WHERE review_id = %s
-    ORDER BY created_at DESC
-    ;`,
-    `'${review_id}'`
-  );
-
-  return db.query(queryStr).then((result) => {
-    return result.rows;
-  });
-};

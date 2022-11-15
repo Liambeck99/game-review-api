@@ -106,32 +106,3 @@ describe("GET /api/reviews/:review_id", () => {
       });
   });
 });
-
-describe("GET /api/reveiws/:review_id/comments", () => {
-  test("200: returns array of comments for the associated review", () => {
-    const REVIEW_ID = 2;
-    return request(app)
-      .get(`/api/reviews/${REVIEW_ID}/comments`)
-      .expect(200)
-      .then(({ body }) => {
-        const { comments } = body;
-        expect(comments.length).toBe(3);
-
-        comments.forEach((comment) => {
-          expect.objectContaining({
-            comment_id: expect.any(Number),
-            votes: expect.any(Number),
-            created_at: expect.any(String),
-            author: expect.any(String),
-            body: expect.any(String),
-            reveiw_id: expect.any(Number),
-          });
-        });
-
-        // check ordered by date desc
-        expect(comments).toBeSortedBy("created_at", {
-          descending: true,
-        });
-      });
-  });
-});
