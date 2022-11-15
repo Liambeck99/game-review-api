@@ -5,6 +5,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const { expect } = require("@jest/globals");
 const { timeStamp } = require("console");
+const { toBeSortedBy } = require("jest-sorted");
 
 beforeEach(() => {
   return seed(testData);
@@ -73,12 +74,9 @@ describe("GET /api/reveiws", () => {
           );
         });
         // check ordered by date desc
-        const datesArray = reviews.map((review) =>
-          Date.parse(review.created_at)
-        );
-        for (let i = 1; i < datesArray.length; i++) {
-          expect(datesArray[i] <= datesArray[i - 1]).toBe(true);
-        }
+        expect(reviews).toBeSortedBy("created_at", {
+          descending: true,
+        });
       });
   });
 });
