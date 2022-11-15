@@ -80,3 +80,29 @@ describe("GET /api/reveiws", () => {
       });
   });
 });
+
+describe("GET /api/reviews/:review_id", () => {
+  test("200: returns single review object", () => {
+    const REVIEW_ID = 1;
+    return request(app)
+      .get(`/api/reviews/${REVIEW_ID}`)
+      .expect(200)
+      .then(({ body }) => {
+        const { review } = body;
+
+        expect(review).toEqual(
+          expect.objectContaining({
+            owner: expect.any(String),
+            title: expect.any(String),
+            review_id: REVIEW_ID,
+            category: expect.any(String),
+            review_img_url: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            designer: expect.any(String),
+            comment_count: expect.any(String),
+          })
+        );
+      });
+  });
+});
