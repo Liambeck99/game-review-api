@@ -1,8 +1,11 @@
+const categoriesRouter = require("./categories-router");
 const apiRouter = require("express").Router();
 
-apiRouter.get("/", (req, res) => {
-  message = "ALL OK from GET /api";
+apiRouter.route("/").get((req, res) => {
+  const message = "ALL OK from GET /api";
   res.status(200).send({ message });
 });
+
+apiRouter.use("/categories", categoriesRouter);
 
 module.exports = apiRouter;
