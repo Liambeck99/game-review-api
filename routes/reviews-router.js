@@ -1,4 +1,8 @@
-const { selectReviews, selectReview } = require("../methods/reviews");
+const {
+  selectReviews,
+  selectReview,
+  selectReviewComments,
+} = require("../methods/reviews");
 
 const reviewsRouter = require("express").Router();
 
@@ -13,6 +17,14 @@ reviewsRouter.route("/:review_id").get((req, res) => {
 
   selectReview(review_id).then((review) => {
     res.status(200).send({ review });
+  });
+});
+
+reviewsRouter.route("/:review_id/comments").get((req, res) => {
+  const { review_id } = req.params;
+
+  selectReviewComments(review_id).then((comments) => {
+    res.status(200).send({ comments });
   });
 });
 
