@@ -31,7 +31,8 @@ describe("GET /api/categories", () => {
       .expect(200)
       .then(({ body }) => {
         const { categories } = body;
-        expect(categories).toBeInstanceOf(Array);
+        const lenGreaterThan1 = (categories.length >= 1);
+        expect(lenGreaterThan1).toBe(true);
         categories.forEach((category) => {
           expect(category).toEqual(
             expect.objectContaining({
