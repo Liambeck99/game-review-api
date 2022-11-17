@@ -175,7 +175,31 @@ describe("POST /api/reviews/:review_id/comments", () => {
 });
 
 describe("PATCH /api/reviews/:review_id", () => {
-  test.todo("202: returns updated review");
+  test("202: returns updated review", () => {
+    const REVIEW_ID = 1;
+    const UPDATE = { inc_votes: 10 };
+
+    return request(app)
+      .patch(`/api/reviews/${REVIEW_ID}`)
+      .send(UPDATE)
+      .expect(202)
+      .then(({ body }) => {
+        const { review } = body;
+
+        expect(review).toEqual(
+          expect.objectContaining({
+            owner: expect.any(String),
+            title: expect.any(String),
+            review_id: expect.any(Number),
+            category: expect.any(String),
+            review_img_url: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            designer: expect.any(String),
+          })
+        );
+      });
+  });
   test.todo("400: returns error message if review_id invalid");
   test.todo("401: returns error message if review_id not found");
 });

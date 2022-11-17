@@ -84,3 +84,20 @@ exports.createReviewComment = (review_id, new_comment) => {
     return result.rows[0];
   });
 };
+
+exports.updateReview = (review_id, update) => {
+  const queryStr = format(
+    `
+  UPDATE reviews
+  SET votes = votes + %L
+  WHERE review_id = %L
+  RETURNING *;
+  `,
+    update.inc_votes,
+    review_id
+  );
+
+  return db.query(queryStr).then((result) => {
+    return result.rows[0];
+  });
+};
