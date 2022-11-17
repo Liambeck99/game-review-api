@@ -47,7 +47,7 @@ describe("GET /api/categories", () => {
   });
 });
 
-describe("GET /api/reveiws", () => {
+describe("GET /api/reviews", () => {
   test("200: returns an array of review objects", () => {
     return request(app)
       .get("/api/reviews")
@@ -105,4 +105,77 @@ describe("GET /api/reviews/:review_id", () => {
         );
       });
   });
+  test.todo("400: returns error message if review_id invalid");
+  test.todo("401: returns error message if review_id not found");
+});
+
+describe("GET /api/reviews/:review_id/comments", () => {
+  test("200: returns array of comments for associated review_id", () => {
+    const REVIEW_ID = 2;
+    return request(app)
+      .get(`/api/reviews/${REVIEW_ID}/comments`)
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments.length).toBe(3);
+
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              review_id: expect.any(Number),
+            })
+          );
+        });
+
+        // check ordered by date desc
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+          coerce: true,
+        });
+      });
+  });
+  test.todo("204: review has no comments so no content to return");
+  test.todo("400: returns error message if review_id invalid");
+  test.todo("401: returns error message if review_id not found");
+});
+
+describe("POST /api/reviews/:review_id/comments", () => {
+  test("201: returns newly posted comment", () => {
+    const REVIEW_ID = 2;
+    const new_comment = {
+      username: "mallionaire",
+      body: "This game fell off",
+    };
+    return request(app)
+      .post(`/api/reviews/${REVIEW_ID}/comments`)
+      .send(new_comment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: new_comment.username,
+            body: new_comment.body,
+            review_id: expect.any(Number),
+          })
+        );
+      });
+  });
+  test.todo("400: returns error message if review_id invalid");
+  test.todo("401: returns error message if review_id not found");
+});
+
+describe("PATCH /api/reviews/:review_id", () => {
+  test.todo("202: returns updated review");
+  test.todo("400: returns error message if review_id invalid");
+  test.todo("401: returns error message if review_id not found");
 });

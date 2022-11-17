@@ -51,3 +51,36 @@ exports.selectReview = (review_id) => {
     return result.rows[0];
   });
 };
+
+exports.selectReviewComments = (review_id) => {
+  const queryStr = format(
+    `SELECT * FROM comments WHERE review_id = %s`,
+    review_id
+  );
+
+  return db.query(queryStr).then((result) => {
+    return result.rows;
+  });
+};
+
+exports.createReviewComment = (review_id, new_comment) => {
+  // console.log(new_comment.body);
+  let queryStr = format(
+    `
+  INSERT INTO comments
+  (body, review_id, author, votes, created_at)
+  VALUES
+  (%L, %L, %L, %L, %L)
+  RETURNING *;
+  `,
+    new_comment.body,
+    review_id,
+    new_comment.username,
+    0,
+    new Date(Date.now())
+  );
+
+  return db.query(queryStr).then((result) => {
+    return result.rows[0];
+  });
+};
