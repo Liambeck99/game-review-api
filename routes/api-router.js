@@ -1,5 +1,6 @@
 const categoriesRouter = require("./categories-router");
 const reviewsRouter = require("./reviews-router");
+const usersRouter = require("./users-router");
 const apiRouter = require("express").Router();
 
 apiRouter.route("/").get((req, res) => {
@@ -9,5 +10,6 @@ apiRouter.route("/").get((req, res) => {
 
 apiRouter.use("/categories", categoriesRouter);
 apiRouter.use("/reviews", reviewsRouter);
+apiRouter.use("/users", usersRouter);
 
 module.exports = apiRouter;

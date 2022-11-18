@@ -6,6 +6,7 @@ const db = require("../db/connection");
 const { expect } = require("@jest/globals");
 const { timeStamp } = require("console");
 const { toBeSortedBy } = require("jest-sorted");
+const { array } = require("yargs");
 
 beforeEach(() => {
   return seed(testData);
@@ -202,4 +203,26 @@ describe("PATCH /api/reviews/:review_id", () => {
   });
   test.todo("400: returns error message if review_id invalid");
   test.todo("401: returns error message if review_id not found");
+});
+
+describe("GET /api/users", () => {
+  test("200: returns an array of objects containing user information", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        expect(users.length).toBeGreaterThanOrEqual(1);
+
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
 });
